@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/screen_padding"
+    android:background="@drawable/background_gradient">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_title" />
+
+    <EditText
+        android:id="@+id/emailInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="@string/email_hint"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/input_background"
+        android:drawableStart="@drawable/ic_email"
+        android:drawableTint="@color/primary"
+        android:drawablePadding="@dimen/input_icon_padding"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/spacing_medium" />
+
+    <EditText
+        android:id="@+id/confirmEmailInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="@string/confirm_email_hint"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/input_background"
+        android:drawableStart="@drawable/ic_email"
+        android:drawableTint="@color/primary"
+        android:drawablePadding="@dimen/input_icon_padding"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/spacing_medium" />
+
+    <EditText
+        android:id="@+id/passwordInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword"
+        android:background="@drawable/input_background"
+        android:drawableStart="@drawable/ic_lock"
+        android:drawableEnd="@drawable/ic_visibility"
+        android:drawableTint="@color/primary"
+        android:drawablePadding="@dimen/input_icon_padding"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/spacing_medium" />
+
+    <EditText
+        android:id="@+id/confirmPasswordInput"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="@string/confirm_password_hint"
+        android:inputType="textPassword"
+        android:background="@drawable/input_background"
+        android:drawableStart="@drawable/ic_lock"
+        android:drawableEnd="@drawable/ic_visibility"
+        android:drawableTint="@color/primary"
+        android:drawablePadding="@dimen/input_icon_padding"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/spacing_large" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:text="@string/signup_button"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/primary_button" />
+
+        <Space
+            android:layout_width="@dimen/spacing_small"
+            android:layout_height="1dp" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:text="@string/cancel_button"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/danger_button" />
+
+    </LinearLayout>
+
+</LinearLayout>

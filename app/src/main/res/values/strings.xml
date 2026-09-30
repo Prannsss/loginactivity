@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Login Activity</string>
+
+    <!-- Login -->
+    <string name="login_title">Welcome Back!</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="signup_button">Signup</string>
+
+    <!-- Signup -->
+    <string name="signup_title">Create a New Account</string>
+    <string name="email_hint">Email</string>
+    <string name="confirm_email_hint">Confirm Email</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="cancel_button">Cancel</string>
+
+    <!-- Messages -->
+    <string name="fill_login_fields">Please enter username and password</string>
+    <string name="login_success">Login successful</string>
+    <string name="fill_signup_fields">Please fill in all fields</string>
+    <string name="emails_not_match">Emails do not match</string>
+    <string name="passwords_not_match">Passwords do not match</string>
+    <string name="signup_success">Signup successful</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="logout_confirm">Confirm</string>
+    <string name="logout_cancel">Cancel</string>
+
+    <!-- Main -->
+    <string name="animation_type">Animation</string>
+    <string name="animation_donut">Donut</string>
+    <string name="animation_mobius">Möbius Strip</string>
+    <string name="rotation_speed">Speed</string>
+    <string name="logout_button">Logout</string>
+
+    <string-array name="animation_options">
+        <item>@string/animation_donut</item>
+        <item>@string/animation_mobius</item>
+    </string-array>
+
+</resources>
