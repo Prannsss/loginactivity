@@ -47,6 +47,24 @@
     <string name="otp_success">OTP verified successfully.</string>
     <string name="otp_generated_log">Generated OTP: %1$s</string>
 
+    <!-- Fingerprint -->
+    <string name="fingerprint_title">Enable Fingerprint Login</string>
+    <string name="fingerprint_message">Would you like to use your fingerprint instead of an OTP the next time you log in?</string>
+    <string name="fingerprint_enable">Enable</string>
+    <string name="fingerprint_skip">Not Now</string>
+
+    <string name="fingerprint_prompt_title">Fingerprint Login</string>
+    <string name="fingerprint_prompt_message">Touch the fingerprint sensor to continue.</string>
+
+    <string name="fingerprint_register_title">Register Fingerprint</string>
+    <string name="fingerprint_register_message">Touch the fingerprint sensor to confirm and enable fingerprint login.</string>
+
+    <string name="fingerprint_success">Fingerprint login enabled.</string>
+    <string name="fingerprint_failed">Fingerprint authentication failed.</string>
+    <string name="fingerprint_unavailable">Fingerprint authentication is not available.</string>
+
+    <string name="use_otp">Use OTP Instead</string>
+    <string name="try_fingerprint_again">Try Again</string>
     <!-- Main -->
     <string name="animation_type">Animation</string>
     <string name="animation_donut">Donut</string>

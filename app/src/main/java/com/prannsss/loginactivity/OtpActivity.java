@@ -1,13 +1,15 @@
 package com.prannsss.loginactivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.content.Context;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,8 +19,11 @@ import java.util.Random;
 
 public class OtpActivity extends Activity {
 
-    private static final String TAG = "OTP_DEBUG";
-    private static final long OTP_DURATION = 30_000;
+    private static final String TAG =
+            "OTP_DEBUG";
+
+    private static final long OTP_DURATION =
+            30_000;
 
     private EditText otpInput1;
     private EditText otpInput2;
@@ -30,43 +35,87 @@ public class OtpActivity extends Activity {
     private CountDownTimer countDownTimer;
 
     private String currentOtp;
+
     private boolean otpExpired = false;
 
+    private FingerprintHelper fingerprintHelper;
+
+    private FingerprintPreferences fingerprintPreferences;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(
+            Bundle savedInstanceState
+    ) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otp);
 
-        otpInput1 = findViewById(R.id.otpInput1);
-        otpInput2 = findViewById(R.id.otpInput2);
-        otpInput3 = findViewById(R.id.otpInput3);
-        otpInput4 = findViewById(R.id.otpInput4);
+        setContentView(
+                R.layout.activity_otp
+        );
 
-        otpTimer = findViewById(R.id.otpTimer);
+        otpInput1 =
+                findViewById(
+                        R.id.otpInput1
+                );
+
+        otpInput2 =
+                findViewById(
+                        R.id.otpInput2
+                );
+
+        otpInput3 =
+                findViewById(
+                        R.id.otpInput3
+                );
+
+        otpInput4 =
+                findViewById(
+                        R.id.otpInput4
+                );
+
+        otpTimer =
+                findViewById(
+                        R.id.otpTimer
+                );
 
         Button verifyOtpButton =
-                findViewById(R.id.verifyOtpButton);
+                findViewById(
+                        R.id.verifyOtpButton
+                );
 
         Button resendOtpButton =
-                findViewById(R.id.resendOtpButton);
+                findViewById(
+                        R.id.resendOtpButton
+                );
 
         Button backToLoginButton =
-                findViewById(R.id.backToLoginButton);
+                findViewById(
+                        R.id.backToLoginButton
+                );
+
+        fingerprintHelper =
+                new FingerprintHelper(this);
+
+        fingerprintPreferences =
+                new FingerprintPreferences(this);
 
         setupOtpInputs();
 
         generateOtp();
 
-        verifyOtpButton.setOnClickListener(view ->
-                verifyOtp()
+        verifyOtpButton.setOnClickListener(
+                view ->
+                        verifyOtp()
         );
 
-        resendOtpButton.setOnClickListener(view ->
-                generateOtp()
+        resendOtpButton.setOnClickListener(
+                view ->
+                        generateOtp()
         );
 
-        backToLoginButton.setOnClickListener(view ->
-                backToLogin()
+        backToLoginButton.setOnClickListener(
+                view ->
+                        backToLogin()
         );
     }
 
@@ -74,13 +123,19 @@ public class OtpActivity extends Activity {
 
         stopTimer();
 
-        Random random = new Random();
+        Random random =
+                new Random();
 
         int otpNumber =
-                1000 + random.nextInt(9000);
+                1000
+                        + random.nextInt(
+                        9000
+                );
 
         currentOtp =
-                String.valueOf(otpNumber);
+                String.valueOf(
+                        otpNumber
+                );
 
         otpExpired = false;
 
@@ -105,9 +160,11 @@ public class OtpActivity extends Activity {
                         );
 
         if (keyboard != null) {
+
             keyboard.showSoftInput(
                     otpInput1,
-                    InputMethodManager.SHOW_IMPLICIT
+                    InputMethodManager
+                            .SHOW_IMPLICIT
             );
         }
     }
@@ -124,13 +181,17 @@ public class OtpActivity extends Activity {
                     public void onTick(
                             long millisUntilFinished
                     ) {
+
                         long remainingSeconds =
-                                (millisUntilFinished + 999)
-                                        / 1000;
+                                (
+                                        millisUntilFinished
+                                                + 999
+                                ) / 1000;
 
                         otpTimer.setText(
                                 getString(
-                                        R.string.otp_timer_seconds,
+                                        R.string
+                                                .otp_timer_seconds,
                                         remainingSeconds
                                 )
                         );
@@ -160,39 +221,127 @@ public class OtpActivity extends Activity {
     private void verifyOtp() {
 
         String enteredOtp =
-                otpInput1.getText().toString()
-                        + otpInput2.getText().toString()
-                        + otpInput3.getText().toString()
-                        + otpInput4.getText().toString();
+                otpInput1.getText()
+                        .toString()
+                        + otpInput2.getText()
+                        .toString()
+                        + otpInput3.getText()
+                        .toString()
+                        + otpInput4.getText()
+                        .toString();
 
         if (enteredOtp.length() != 4) {
-            showMessage(R.string.otp_empty);
+
+            showMessage(
+                    R.string.otp_empty
+            );
+
             return;
         }
 
-        if (otpExpired || currentOtp == null) {
-            showMessage(R.string.otp_expired);
+        if (
+                otpExpired
+                        || currentOtp == null
+        ) {
+
+            showMessage(
+                    R.string.otp_expired
+            );
+
             return;
         }
 
-        if (enteredOtp.equals(currentOtp)) {
-
-            showMessage(R.string.otp_success);
+        if (
+                enteredOtp.equals(
+                        currentOtp
+                )
+        ) {
 
             stopTimer();
 
-            Intent intent =
-                    new Intent(
-                            this,
-                            DonutActivity.class
-                    );
-
-            startActivity(intent);
-            finish();
+            showFingerprintRegistration();
 
         } else {
-            showMessage(R.string.otp_invalid);
+
+            showMessage(
+                    R.string.otp_invalid
+            );
         }
+    }
+
+    private void showFingerprintRegistration() {
+
+        if (
+                !fingerprintHelper
+                        .isAvailable()
+        ) {
+
+            openDonutActivity();
+
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(
+                        R.string.fingerprint_title
+                )
+                .setMessage(
+                        R.string.fingerprint_message
+                )
+                .setNegativeButton(
+                        R.string.fingerprint_skip,
+                        (dialog, which) ->
+                                openDonutActivity()
+                )
+                .setPositiveButton(
+                        R.string.fingerprint_enable,
+                        (dialog, which) ->
+                                registerFingerprint()
+                )
+                .setCancelable(false)
+                .show();
+    }
+
+    private void registerFingerprint() {
+
+        fingerprintHelper.authenticate(
+                new FingerprintHelper.AuthenticationCallback() {
+
+                    @Override
+                    public void onSuccess() {
+
+                        fingerprintPreferences
+                                .setFingerprintEnabled(
+                                        true
+                                );
+
+                        showMessage(
+                                R.string.fingerprint_success
+                        );
+
+                        openDonutActivity();
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                        showMessage(
+                                R.string
+                                        .fingerprint_failed
+                        );
+                    }
+
+                    @Override
+                    public void onError(
+                            String message
+                    ) {
+
+                        showMessage(message);
+
+                        openDonutActivity();
+                    }
+                }
+        );
     }
 
     private void setupOtpInputs() {
@@ -211,6 +360,91 @@ public class OtpActivity extends Activity {
                 otpInput3,
                 otpInput4
         );
+
+        otpInput1.setOnKeyListener(
+                (view, keyCode, event) -> {
+
+                    return false;
+                }
+        );
+
+        otpInput2.setOnKeyListener(
+                (view, keyCode, event) -> {
+
+                    if (
+                            keyCode
+                                    == KeyEvent
+                                    .KEYCODE_DEL
+                                    && event.getAction()
+                                    == KeyEvent
+                                    .ACTION_DOWN
+                                    && otpInput2
+                                    .getText()
+                                    .length()
+                                    == 0
+                    ) {
+
+                        otpInput1
+                                .requestFocus();
+
+                        return true;
+                    }
+
+                    return false;
+                }
+        );
+
+        otpInput3.setOnKeyListener(
+                (view, keyCode, event) -> {
+
+                    if (
+                            keyCode
+                                    == KeyEvent
+                                    .KEYCODE_DEL
+                                    && event.getAction()
+                                    == KeyEvent
+                                    .ACTION_DOWN
+                                    && otpInput3
+                                    .getText()
+                                    .length()
+                                    == 0
+                    ) {
+
+                        otpInput2
+                                .requestFocus();
+
+                        return true;
+                    }
+
+                    return false;
+                }
+        );
+
+        otpInput4.setOnKeyListener(
+                (view, keyCode, event) -> {
+
+                    if (
+                            keyCode
+                                    == KeyEvent
+                                    .KEYCODE_DEL
+                                    && event.getAction()
+                                    == KeyEvent
+                                    .ACTION_DOWN
+                                    && otpInput4
+                                    .getText()
+                                    .length()
+                                    == 0
+                    ) {
+
+                        otpInput3
+                                .requestFocus();
+
+                        return true;
+                    }
+
+                    return false;
+                }
+        );
     }
 
     private void setupInput(
@@ -218,29 +452,12 @@ public class OtpActivity extends Activity {
             EditText next
     ) {
 
-        current.setOnKeyListener(
-                (view, keyCode, event) -> {
-
-                    if (keyCode ==
-                            android.view.KeyEvent.KEYCODE_DEL
-                            && event.getAction() ==
-                            android.view.KeyEvent.ACTION_DOWN
-                            && current.getText().length() == 0) {
-
-                        return false;
-                    }
-
-                    return false;
-                }
-        );
-
         current.setOnFocusChangeListener(
                 (view, hasFocus) -> {
-                    if (!hasFocus) {
-                        return;
-                    }
 
-                    current.selectAll();
+                    if (hasFocus) {
+                        current.selectAll();
+                    }
                 }
         );
 
@@ -263,7 +480,11 @@ public class OtpActivity extends Activity {
                             int before,
                             int count
                     ) {
-                        if (s.length() == 1) {
+
+                        if (
+                                s.length() == 1
+                        ) {
+
                             next.requestFocus();
                         }
                     }
@@ -288,7 +509,9 @@ public class OtpActivity extends Activity {
     private void stopTimer() {
 
         if (countDownTimer != null) {
+
             countDownTimer.cancel();
+
             countDownTimer = null;
         }
     }
@@ -298,6 +521,7 @@ public class OtpActivity extends Activity {
         stopTimer();
 
         currentOtp = null;
+
         otpExpired = true;
 
         Intent intent =
@@ -316,11 +540,37 @@ public class OtpActivity extends Activity {
         finish();
     }
 
-    private void showMessage(int messageId) {
+    private void openDonutActivity() {
+
+        Intent intent =
+                new Intent(
+                        this,
+                        DonutActivity.class
+                );
+
+        startActivity(intent);
+
+        finish();
+    }
+
+    private void showMessage(
+            int messageId
+    ) {
 
         Toast.makeText(
                 this,
                 messageId,
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    private void showMessage(
+            String message
+    ) {
+
+        Toast.makeText(
+                this,
+                message,
                 Toast.LENGTH_SHORT
         ).show();
     }
@@ -331,6 +581,10 @@ public class OtpActivity extends Activity {
         stopTimer();
 
         currentOtp = null;
+
+        if (fingerprintHelper != null) {
+            fingerprintHelper.cancel();
+        }
 
         super.onDestroy();
     }

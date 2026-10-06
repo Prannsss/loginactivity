@@ -26,11 +26,12 @@ public class LoginActivity extends Activity {
     private static final String LOGIN_URL =
             "https://loginactivity.onrender.com/api/login";
 
+    private FingerprintHelper fingerprintHelper;
+    private FingerprintPreferences fingerprintPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         EditText usernameInput =
@@ -45,14 +46,17 @@ public class LoginActivity extends Activity {
         Button signupButton =
                 findViewById(R.id.signupButton);
 
+        fingerprintHelper =
+                new FingerprintHelper(this);
+
+        fingerprintPreferences =
+                new FingerprintPreferences(this);
+
         setupUsernameIcon(usernameInput);
         setupPasswordToggle(passwordInput);
 
         loginButton.setOnClickListener(view ->
-                login(
-                        usernameInput,
-                        passwordInput
-                )
+                login(usernameInput, passwordInput)
         );
 
         signupButton.setOnClickListener(view ->
@@ -69,19 +73,17 @@ public class LoginActivity extends Activity {
             EditText usernameInput,
             EditText passwordInput
     ) {
-
         String username =
-                usernameInput
-                        .getText()
+                usernameInput.getText()
                         .toString()
                         .trim();
 
         String password =
-                passwordInput
-                        .getText()
+                passwordInput.getText()
                         .toString();
 
-        if (username.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty()
+                || password.isEmpty()) {
 
             showMessage(
                     R.string.fill_login_fields
@@ -100,7 +102,6 @@ public class LoginActivity extends Activity {
             String username,
             String password
     ) {
-
         new Thread(() -> {
 
             HttpURLConnection connection = null;
@@ -129,6 +130,7 @@ public class LoginActivity extends Activity {
                 connection.setDoOutput(true);
 
                 connection.setConnectTimeout(10000);
+
                 connection.setReadTimeout(10000);
 
                 JSONObject requestBody =
@@ -151,10 +153,15 @@ public class LoginActivity extends Activity {
                                         StandardCharsets.UTF_8
                                 );
 
-                try (OutputStream outputStream =
-                             connection.getOutputStream()) {
+                try (
+                        OutputStream outputStream =
+                                connection.getOutputStream()
+                ) {
 
-                    outputStream.write(requestData);
+                    outputStream.write(
+                            requestData
+                    );
+
                     outputStream.flush();
                 }
 
@@ -163,8 +170,10 @@ public class LoginActivity extends Activity {
 
                 InputStream inputStream;
 
-                if (responseCode >= 200
-                        && responseCode < 300) {
+                if (
+                        responseCode >= 200
+                                && responseCode < 300
+                ) {
 
                     inputStream =
                             connection.getInputStream();
@@ -176,7 +185,9 @@ public class LoginActivity extends Activity {
                 }
 
                 String response =
-                        readResponse(inputStream);
+                        readResponse(
+                                inputStream
+                        );
 
                 runOnUiThread(() ->
                         handleLoginResponse(
@@ -188,10 +199,13 @@ public class LoginActivity extends Activity {
             } catch (Exception exception) {
 
                 exception.printStackTrace();
-                
+
                 runOnUiThread(() ->
                         showMessage(
-                                "Error: " + exception.getClass().getSimpleName()
+                                "Error: "
+                                        + exception
+                                        .getClass()
+                                        .getSimpleName()
                         )
                 );
 
@@ -227,17 +241,12 @@ public class LoginActivity extends Activity {
                             "Login failed"
                     );
 
-            if (success && responseCode == 200) {
+            if (
+                    success
+                            && responseCode == 200
+            ) {
 
-                Intent intent =
-                        new Intent(
-                                this,
-                                OtpActivity.class
-                        );
-
-                startActivity(intent);
-
-                finish();
+                handleSuccessfulLogin();
 
             } else {
 
@@ -250,6 +259,103 @@ public class LoginActivity extends Activity {
                     "Invalid server response"
             );
         }
+    }
+
+    private void handleSuccessfulLogin() {
+
+        if (
+                fingerprintPreferences
+                        .isFingerprintEnabled()
+                        && fingerprintHelper
+                        .isAvailable()
+        ) {
+
+            showFingerprintLogin();
+
+        } else {
+
+            openOtpActivity();
+        }
+    }
+
+    private void showFingerprintLogin() {
+
+        new android.app.AlertDialog.Builder(this)
+                .setTitle(
+                        R.string.fingerprint_prompt_title
+                )
+                .setMessage(
+                        R.string.fingerprint_prompt_message
+                )
+                .setNegativeButton(
+                        R.string.use_otp,
+                        (dialog, which) ->
+                                openOtpActivity()
+                )
+                .setPositiveButton(
+                        R.string.try_fingerprint_again,
+                        null
+                )
+                .setCancelable(false)
+                .show();
+
+        authenticateFingerprint();
+    }
+
+    private void authenticateFingerprint() {
+
+        fingerprintHelper.authenticate(
+                new FingerprintHelper.AuthenticationCallback() {
+
+                    @Override
+                    public void onSuccess() {
+
+                        openDonutActivity();
+                    }
+
+                    @Override
+                    public void onFailed() {
+
+                        showMessage(
+                                R.string.fingerprint_failed
+                        );
+                    }
+
+                    @Override
+                    public void onError(
+                            String message
+                    ) {
+
+                        openOtpActivity();
+                    }
+                }
+        );
+    }
+
+    private void openOtpActivity() {
+
+        Intent intent =
+                new Intent(
+                        this,
+                        OtpActivity.class
+                );
+
+        startActivity(intent);
+
+        finish();
+    }
+
+    private void openDonutActivity() {
+
+        Intent intent =
+                new Intent(
+                        this,
+                        DonutActivity.class
+                );
+
+        startActivity(intent);
+
+        finish();
     }
 
     private String readResponse(
@@ -273,7 +379,10 @@ public class LoginActivity extends Activity {
 
         String line;
 
-        while ((line = reader.readLine()) != null) {
+        while (
+                (line = reader.readLine()) != null
+        ) {
+
             response.append(line);
         }
 
@@ -295,7 +404,9 @@ public class LoginActivity extends Activity {
                 );
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint(
+            "ClickableViewAccessibility"
+    )
     private void setupPasswordToggle(
             EditText passwordInput
     ) {
@@ -311,8 +422,10 @@ public class LoginActivity extends Activity {
         passwordInput.setOnTouchListener(
                 (view, event) -> {
 
-                    if (event.getAction()
-                            != MotionEvent.ACTION_UP) {
+                    if (
+                            event.getAction()
+                                    != MotionEvent.ACTION_UP
+                    ) {
 
                         return false;
                     }
@@ -329,8 +442,10 @@ public class LoginActivity extends Activity {
                                     .getPaddingEnd()
                                     - drawableEndWidth;
 
-                    if (event.getX()
-                            < touchAreaStart) {
+                    if (
+                            event.getX()
+                                    < touchAreaStart
+                    ) {
 
                         return false;
                     }
@@ -338,7 +453,8 @@ public class LoginActivity extends Activity {
                     boolean isPasswordHidden =
                             passwordInput
                                     .getTransformationMethod()
-                                    instanceof PasswordTransformationMethod;
+                                    instanceof
+                                    PasswordTransformationMethod;
 
                     if (isPasswordHidden) {
 
@@ -402,5 +518,15 @@ public class LoginActivity extends Activity {
                 message,
                 Toast.LENGTH_SHORT
         ).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (fingerprintHelper != null) {
+            fingerprintHelper.cancel();
+        }
+
+        super.onDestroy();
     }
 }
