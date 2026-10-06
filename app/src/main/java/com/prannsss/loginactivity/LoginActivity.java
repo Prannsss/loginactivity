@@ -11,28 +11,57 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 public class LoginActivity extends Activity {
+
+    private static final String LOGIN_URL =
+            "https://loginactivity.onrender.com/api/login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
-        EditText usernameInput = findViewById(R.id.usernameInput);
-        EditText passwordInput = findViewById(R.id.passwordInput);
+        EditText usernameInput =
+                findViewById(R.id.usernameInput);
 
-        Button loginButton = findViewById(R.id.loginButton);
-        Button signupButton = findViewById(R.id.signupButton);
+        EditText passwordInput =
+                findViewById(R.id.passwordInput);
+
+        Button loginButton =
+                findViewById(R.id.loginButton);
+
+        Button signupButton =
+                findViewById(R.id.signupButton);
 
         setupUsernameIcon(usernameInput);
         setupPasswordToggle(passwordInput);
 
         loginButton.setOnClickListener(view ->
-                login(usernameInput, passwordInput)
+                login(
+                        usernameInput,
+                        passwordInput
+                )
         );
 
         signupButton.setOnClickListener(view ->
-                startActivity(new Intent(this, SignupActivity.class))
+                startActivity(
+                        new Intent(
+                                this,
+                                SignupActivity.class
+                        )
+                )
         );
     }
 
@@ -42,111 +71,335 @@ public class LoginActivity extends Activity {
     ) {
 
         String username =
-                usernameInput.getText().toString().trim();
+                usernameInput
+                        .getText()
+                        .toString()
+                        .trim();
 
         String password =
-                passwordInput.getText().toString();
+                passwordInput
+                        .getText()
+                        .toString();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showMessage(R.string.fill_login_fields);
+
+            showMessage(
+                    R.string.fill_login_fields
+            );
+
             return;
         }
 
-        // Successful login
-        Intent intent =
-                new Intent(this, DonutActivity.class);
-
-        startActivity(intent);
-
-        finish();
-    }
-
-    private void setupUsernameIcon(EditText usernameInput) {
-
-        usernameInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_person,
-                0,
-                0,
-                0
+        validateLogin(
+                username,
+                password
         );
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private void setupPasswordToggle(EditText passwordInput) {
+    private void validateLogin(
+            String username,
+            String password
+    ) {
 
-        passwordInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_lock,
-                0,
-                R.drawable.ic_visibility,
-                0
-        );
+        new Thread(() -> {
 
-        passwordInput.setOnTouchListener((view, event) -> {
+            HttpURLConnection connection = null;
 
-            if (event.getAction() != MotionEvent.ACTION_UP) {
-                return false;
-            }
+            try {
 
-            int drawableEndWidth =
-                    passwordInput
-                            .getCompoundDrawablesRelative()[2]
-                            .getBounds()
-                            .width();
+                URL url =
+                        new URL(LOGIN_URL);
 
-            int touchAreaStart =
-                    passwordInput.getWidth()
-                            - passwordInput.getPaddingEnd()
-                            - drawableEndWidth;
+                connection =
+                        (HttpURLConnection)
+                                url.openConnection();
 
-            if (event.getX() < touchAreaStart) {
-                return false;
-            }
+                connection.setRequestMethod("POST");
 
-            boolean isPasswordHidden =
-                    passwordInput
-                            .getTransformationMethod()
-                            instanceof PasswordTransformationMethod;
-
-            if (isPasswordHidden) {
-
-                passwordInput.setTransformationMethod(
-                        HideReturnsTransformationMethod.getInstance()
+                connection.setRequestProperty(
+                        "Content-Type",
+                        "application/json; charset=UTF-8"
                 );
 
-                passwordInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        R.drawable.ic_lock,
-                        0,
-                        R.drawable.ic_visibility_off,
-                        0
+                connection.setRequestProperty(
+                        "Accept",
+                        "application/json"
                 );
+
+                connection.setDoOutput(true);
+
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
+
+                JSONObject requestBody =
+                        new JSONObject();
+
+                requestBody.put(
+                        "username",
+                        username
+                );
+
+                requestBody.put(
+                        "password",
+                        password
+                );
+
+                byte[] requestData =
+                        requestBody
+                                .toString()
+                                .getBytes(
+                                        StandardCharsets.UTF_8
+                                );
+
+                try (OutputStream outputStream =
+                             connection.getOutputStream()) {
+
+                    outputStream.write(requestData);
+                    outputStream.flush();
+                }
+
+                int responseCode =
+                        connection.getResponseCode();
+
+                InputStream inputStream;
+
+                if (responseCode >= 200
+                        && responseCode < 300) {
+
+                    inputStream =
+                            connection.getInputStream();
+
+                } else {
+
+                    inputStream =
+                            connection.getErrorStream();
+                }
+
+                String response =
+                        readResponse(inputStream);
+
+                runOnUiThread(() ->
+                        handleLoginResponse(
+                                responseCode,
+                                response
+                        )
+                );
+
+            } catch (Exception exception) {
+
+                exception.printStackTrace();
+                
+                runOnUiThread(() ->
+                        showMessage(
+                                "Error: " + exception.getClass().getSimpleName()
+                        )
+                );
+
+            } finally {
+
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    private void handleLoginResponse(
+            int responseCode,
+            String response
+    ) {
+
+        try {
+
+            JSONObject json =
+                    new JSONObject(response);
+
+            boolean success =
+                    json.optBoolean(
+                            "success",
+                            false
+                    );
+
+            String message =
+                    json.optString(
+                            "message",
+                            "Login failed"
+                    );
+
+            if (success && responseCode == 200) {
+
+                Intent intent =
+                        new Intent(
+                                this,
+                                OtpActivity.class
+                        );
+
+                startActivity(intent);
+
+                finish();
 
             } else {
 
-                passwordInput.setTransformationMethod(
-                        PasswordTransformationMethod.getInstance()
+                showMessage(message);
+            }
+
+        } catch (Exception exception) {
+
+            showMessage(
+                    "Invalid server response"
+            );
+        }
+    }
+
+    private String readResponse(
+            InputStream inputStream
+    ) throws Exception {
+
+        if (inputStream == null) {
+            return "";
+        }
+
+        StringBuilder response =
+                new StringBuilder();
+
+        BufferedReader reader =
+                new BufferedReader(
+                        new InputStreamReader(
+                                inputStream,
+                                StandardCharsets.UTF_8
+                        )
                 );
 
-                passwordInput.setCompoundDrawablesRelativeWithIntrinsicBounds(
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+
+        reader.close();
+
+        return response.toString();
+    }
+
+    private void setupUsernameIcon(
+            EditText usernameInput
+    ) {
+
+        usernameInput
+                .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        R.drawable.ic_person,
+                        0,
+                        0,
+                        0
+                );
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupPasswordToggle(
+            EditText passwordInput
+    ) {
+
+        passwordInput
+                .setCompoundDrawablesRelativeWithIntrinsicBounds(
                         R.drawable.ic_lock,
                         0,
                         R.drawable.ic_visibility,
                         0
                 );
-            }
 
-            passwordInput.setSelection(
-                    passwordInput.length()
-            );
+        passwordInput.setOnTouchListener(
+                (view, event) -> {
 
-            return true;
-        });
+                    if (event.getAction()
+                            != MotionEvent.ACTION_UP) {
+
+                        return false;
+                    }
+
+                    int drawableEndWidth =
+                            passwordInput
+                                    .getCompoundDrawablesRelative()[2]
+                                    .getBounds()
+                                    .width();
+
+                    int touchAreaStart =
+                            passwordInput.getWidth()
+                                    - passwordInput
+                                    .getPaddingEnd()
+                                    - drawableEndWidth;
+
+                    if (event.getX()
+                            < touchAreaStart) {
+
+                        return false;
+                    }
+
+                    boolean isPasswordHidden =
+                            passwordInput
+                                    .getTransformationMethod()
+                                    instanceof PasswordTransformationMethod;
+
+                    if (isPasswordHidden) {
+
+                        passwordInput
+                                .setTransformationMethod(
+                                        HideReturnsTransformationMethod
+                                                .getInstance()
+                                );
+
+                        passwordInput
+                                .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                        R.drawable.ic_lock,
+                                        0,
+                                        R.drawable.ic_visibility_off,
+                                        0
+                                );
+
+                    } else {
+
+                        passwordInput
+                                .setTransformationMethod(
+                                        PasswordTransformationMethod
+                                                .getInstance()
+                                );
+
+                        passwordInput
+                                .setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                        R.drawable.ic_lock,
+                                        0,
+                                        R.drawable.ic_visibility,
+                                        0
+                                );
+                    }
+
+                    passwordInput.setSelection(
+                            passwordInput.length()
+                    );
+
+                    return true;
+                }
+        );
     }
 
-    private void showMessage(int messageId) {
+    private void showMessage(
+            int messageId
+    ) {
 
         Toast.makeText(
                 this,
                 messageId,
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    private void showMessage(
+            String message
+    ) {
+
+        Toast.makeText(
+                this,
+                message,
                 Toast.LENGTH_SHORT
         ).show();
     }

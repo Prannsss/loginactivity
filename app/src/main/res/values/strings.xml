@@ -29,6 +29,23 @@
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="logout_confirm">Confirm</string>
     <string name="logout_cancel">Cancel</string>
+    <string name="otp_title">Enter OTP</string>
+
+    <!-- OTP -->
+    <string name="otp_description">Enter the 4-digit code sent to verify your login.</string>
+
+    <string name="otp_timer">Code expires in 30 seconds</string>
+    <string name="otp_timer_seconds">Code expires in %1$d seconds</string>
+    <string name="otp_expired">OTP has expired.</string>
+
+    <string name="verify_otp_button">Verify OTP</string>
+    <string name="resend_otp_button">Resend OTP</string>
+    <string name="back_to_login_button">Back to Login</string>
+
+    <string name="otp_empty">Please enter the 4-digit OTP.</string>
+    <string name="otp_invalid">Invalid OTP.</string>
+    <string name="otp_success">OTP verified successfully.</string>
+    <string name="otp_generated_log">Generated OTP: %1$s</string>
 
     <!-- Main -->
     <string name="animation_type">Animation</string>
