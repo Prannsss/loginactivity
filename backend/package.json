@@ -1,0 +1,12 @@
+{
+  "name": "login-activity-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Login Activity Android app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
