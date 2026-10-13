@@ -1,3 +1,4 @@
+
 package com.prannsss.loginactivity;
 
 import android.app.Activity;
@@ -17,49 +18,35 @@ public class DonutActivity extends Activity {
     private TextView donutView;
     private SeekBar speedSlider;
     private Spinner animationSpinner;
+    private Spinner activityDropdown;
 
     private final Handler handler = new Handler();
 
-    private final DonutRenderer donutRenderer =
-            new DonutRenderer();
-
-    private final MobiusRenderer mobiusRenderer =
-            new MobiusRenderer();
+    private final DonutRenderer donutRenderer = new DonutRenderer();
+    private final MobiusRenderer mobiusRenderer = new MobiusRenderer();
 
     private double rotationA = 0;
     private double rotationB = 0;
-
     private double rotationSpeed = 0.07;
 
     private int selectedAnimation = 0;
-
     private boolean animationRunning = false;
+    private boolean isNavigating = false;
 
     private final Runnable animation = new Runnable() {
-
         @Override
         public void run() {
-
             if (!animationRunning) {
                 return;
             }
 
             if (selectedAnimation == 0) {
-
                 donutView.setText(
-                        donutRenderer.render(
-                                rotationA,
-                                rotationB
-                        )
+                        donutRenderer.render(rotationA, rotationB)
                 );
-
             } else {
-
                 donutView.setText(
-                        mobiusRenderer.render(
-                                rotationA,
-                                rotationB
-                        )
+                        mobiusRenderer.render(rotationA, rotationB)
                 );
             }
 
@@ -72,28 +59,66 @@ public class DonutActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_donut);
 
         donutView = findViewById(R.id.donutView);
         speedSlider = findViewById(R.id.speedSlider);
         animationSpinner = findViewById(R.id.animationSpinner);
+        activityDropdown = findViewById(R.id.activityDropdown);
 
-        Button logoutButton =
-                findViewById(R.id.logoutButton);
+        Button logoutButton = findViewById(R.id.logoutButton);
 
+        setupActivityDropdown();
         setupAnimationSpinner();
         setupSpeedSlider();
 
-        logoutButton.setOnClickListener(
-                view -> logout()
+        logoutButton.setOnClickListener(view -> logout());
+    }
+
+    private void setupActivityDropdown() {
+        String[] pages = {"User List", "Donut Animation"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                pages
+        );
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        activityDropdown.setAdapter(adapter);
+        activityDropdown.setSelection(1, false);
+
+        activityDropdown.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(
+                            AdapterView<?> parent,
+                            View view,
+                            int position,
+                            long id) {
+
+                        if (position == 0 && !isNavigating) {
+                            isNavigating = true;
+
+                            startActivity(new Intent(
+                                    DonutActivity.this,
+                                    UserListActivity.class
+                            ));
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                }
         );
     }
 
     private void setupAnimationSpinner() {
-
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(
                         this,
@@ -109,127 +134,104 @@ public class DonutActivity extends Activity {
 
         animationSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
-
                     @Override
                     public void onItemSelected(
                             AdapterView<?> parent,
                             View view,
                             int position,
-                            long id
-                    ) {
+                            long id) {
 
                         selectedAnimation = position;
-
                         rotationA = 0;
                         rotationB = 0;
                     }
 
                     @Override
-                    public void onNothingSelected(
-                            AdapterView<?> parent
-                    ) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                     }
                 }
         );
     }
 
     private void setupSpeedSlider() {
-
         speedSlider.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
-
                     @Override
                     public void onProgressChanged(
                             SeekBar seekBar,
                             int progress,
-                            boolean fromUser
-                    ) {
+                            boolean fromUser) {
 
-                        rotationSpeed =
-                                0.01
-                                        + (progress / 100.0) * 0.19;
+                        rotationSpeed = 0.01 + (progress / 100.0) * 0.19;
                     }
 
                     @Override
-                    public void onStartTrackingTouch(
-                            SeekBar seekBar
-                    ) {
+                    public void onStartTrackingTouch(SeekBar seekBar) {
                     }
 
                     @Override
-                    public void onStopTrackingTouch(
-                            SeekBar seekBar
-                    ) {
+                    public void onStopTrackingTouch(SeekBar seekBar) {
                     }
                 }
         );
     }
 
     private void startAnimation() {
-
         if (animationRunning) {
             return;
         }
 
         animationRunning = true;
-
         handler.post(animation);
     }
 
     private void stopAnimation() {
-
         animationRunning = false;
-
         handler.removeCallbacks(animation);
     }
 
     private void logout() {
-
         new android.app.AlertDialog.Builder(this)
                 .setTitle(R.string.logout_title)
                 .setMessage(R.string.logout_message)
-                .setNegativeButton(
-                        R.string.logout_cancel,
-                        null
-                )
+                .setNegativeButton(R.string.logout_cancel, null)
                 .setPositiveButton(
                         R.string.logout_confirm,
                         (dialog, which) -> performLogout()
                 )
                 .show();
     }
-    private void performLogout() {
 
+    private void performLogout() {
         stopAnimation();
 
-        Intent intent =
-                new Intent(
-                        this,
-                        LoginActivity.class
-                );
-
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
         );
 
         startActivity(intent);
-
         finish();
     }
+
     @Override
     protected void onResume() {
-
         super.onResume();
+        isNavigating = false;
+
+        if (activityDropdown != null
+                && activityDropdown.getSelectedItemPosition() != 1) {
+            activityDropdown.setSelection(1, false);
+        }
 
         startAnimation();
     }
 
     @Override
     protected void onPause() {
-
         super.onPause();
-
         stopAnimation();
     }
 }

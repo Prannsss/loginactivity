@@ -545,7 +545,7 @@ public class OtpActivity extends Activity {
         Intent intent =
                 new Intent(
                         this,
-                        DonutActivity.class
+                        UserListActivity.class
                 );
 
         startActivity(intent);

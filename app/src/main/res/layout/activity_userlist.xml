@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/background_gradient"
+    android:padding="@dimen/screen_padding">
+
+    <!-- Page title -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/userlist_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_small" />
+
+    <!-- Activity navigation -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Page"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/spacing_small" />
+
+    <Spinner
+        android:id="@+id/activityDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginBottom="@dimen/spacing_medium" />
+
+    <!-- User count / status -->
+
+    <TextView
+        android:id="@+id/userlistSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/userlist_loading"
+        android:textColor="@color/secondary_text"
+        android:layout_marginBottom="@dimen/spacing_small" />
+
+    <!-- Registered users -->
+
+    <ListView
+        android:id="@+id/userListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:divider="@color/input_border"
+        android:dividerHeight="1dp"
+        android:padding="@dimen/input_padding"
+        android:clipToPadding="false" />
+
+    <!-- Refresh users -->
+
+    <Button
+        android:id="@+id/refreshUsersButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/refresh_users"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/primary_button"
+        android:layout_marginTop="@dimen/spacing_medium" />
+
+    <!-- Logout -->
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/logout_button"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/danger_button"
+        android:layout_marginTop="@dimen/spacing_small" />
+
+</LinearLayout>

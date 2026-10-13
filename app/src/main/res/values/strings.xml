@@ -10,6 +10,7 @@
     <string name="password_hint">Password</string>
     <string name="login_button">Login</string>
     <string name="signup_button">Signup</string>
+    <string name="login_failed">Login failed. Check your connection or credentials.</string>
 
     <!-- Signup -->
     <string name="signup_title">Create a New Account</string>
@@ -24,12 +25,16 @@
     <string name="fill_signup_fields">Please fill in all fields</string>
     <string name="emails_not_match">Emails do not match</string>
     <string name="passwords_not_match">Passwords do not match</string>
-    <string name="signup_success">Signup successful</string>
     <string name="logout_title">Logout</string>
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="logout_confirm">Confirm</string>
     <string name="logout_cancel">Cancel</string>
     <string name="otp_title">Enter OTP</string>
+    <string name="invalid_email">Please enter a valid email address.</string>
+    <string name="email_mismatch">Email addresses do not match.</string>
+    <string name="password_mismatch">Passwords do not match.</string>
+    <string name="email_already_registered">This email is already registered locally.</string>
+    <string name="signup_success">Account registered locally. You can now log in.</string>
 
     <!-- OTP -->
     <string name="otp_description">Enter the 4-digit code sent to verify your login.</string>
@@ -71,6 +76,18 @@
     <string name="animation_mobius">Möbius Strip</string>
     <string name="rotation_speed">Speed</string>
     <string name="logout_button">Logout</string>
+
+    <!--Load User List -->
+    <string name="userlist_title">User List</string>
+    <string name="userlist_loading">Loading users...</string>
+    <string name="userlist_local_source">LOCAL</string>
+    <string name="userlist_render_source">RENDER</string>
+    <string name="userlist_empty">No users found.</string>
+    <string name="userlist_loaded_count">Users found: %1$d</string>
+    <string name="userlist_load_failed">Could not load server users. Showing local users.</string>
+    <string name="refresh_users">Refresh Users</string>
+    <string name="open_animation">Open Animation</string>
+    <string name="userlist_server_error">Unable to retrieve server users.</string>
 
     <string-array name="animation_options">
         <item>@string/animation_donut</item>

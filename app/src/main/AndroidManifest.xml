@@ -39,6 +39,11 @@
             android:name=".OtpActivity"
             android:exported="false" />
 
+        <!-- UserList Activity -->
+        <activity
+            android:name=".UserListActivity"
+            android:exported="false" />
+
         <!-- Donut Page -->
         <activity
             android:name=".DonutActivity"
