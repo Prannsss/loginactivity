@@ -39,7 +39,7 @@ public class OtpActivityTest {
     private static ActivityScenario<LoginActivity> loginScenario;
 
     @Test
-    public void invalidOtp_thenValidOtp_shouldOpenUserList() throws Exception {
+    public void invalidOtp_thenValidOtp_shouldOpenMainDashboard() throws Exception {
         String email = createUniqueEmail();
 
         loginScenario = ActivityScenario.launch(LoginActivity.class);
@@ -105,9 +105,9 @@ public class OtpActivityTest {
 
         delay(OTP_ATTEMPT_DELAY_MS);
 
-        // Successful verification should open the User List page.
-        waitForView(R.id.userlistSummary, 15000);
-        onView(withId(R.id.userlistSummary)).check(matches(isDisplayed()));
+        // Successful verification should open the Main Dashboard.
+        waitForView(R.id.dashboardTitle, 15000);
+        onView(withId(R.id.dashboardTitle)).check(matches(isDisplayed()));
 
         // Intentionally do not call loginScenario.close().
     }

@@ -4,12 +4,9 @@ package com.prannsss.loginactivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +33,8 @@ public class UserListActivity extends Activity {
     private ListView userListView;
     private TextView userlistSummary;
     private ArrayAdapter<String> userAdapter;
-    private Spinner activityDropdown;
 
     private final List<String> displayedUsers = new ArrayList<>();
-    private boolean isNavigating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +45,9 @@ public class UserListActivity extends Activity {
 
         userListView = findViewById(R.id.userListView);
         userlistSummary = findViewById(R.id.userlistSummary);
-        activityDropdown = findViewById(R.id.activityDropdown);
 
         Button refreshButton = findViewById(R.id.refreshUsersButton);
         Button logoutButton = findViewById(R.id.logoutButton);
-
-        setupActivityDropdown();
 
         userAdapter = new ArrayAdapter<>(
                 this,
@@ -68,58 +60,6 @@ public class UserListActivity extends Activity {
         logoutButton.setOnClickListener(v -> logout());
 
         loadUsers();
-    }
-
-    private void setupActivityDropdown() {
-        String[] pages = {"User List", "Donut Animation"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                pages
-        );
-
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item
-        );
-
-        activityDropdown.setAdapter(adapter);
-        activityDropdown.setSelection(0, false);
-
-        activityDropdown.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(
-                            AdapterView<?> parent,
-                            View view,
-                            int position,
-                            long id) {
-
-                        if (position == 1 && !isNavigating) {
-                            isNavigating = true;
-                            startActivity(new Intent(
-                                    UserListActivity.this,
-                                    DonutActivity.class
-                            ));
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                }
-        );
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        isNavigating = false;
-
-        if (activityDropdown != null
-                && activityDropdown.getSelectedItemPosition() != 0) {
-            activityDropdown.setSelection(0, false);
-        }
     }
 
     private void loadUsers() {

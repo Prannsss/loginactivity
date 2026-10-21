@@ -105,13 +105,13 @@ public class LoginActivityTest {
         enterOtp(otp);
         delay();
 
-        // 8. Wait for UserListActivity.
-        waitForView(R.id.userlistSummary, 15000);
+        // 8. Wait for MainDashboardActivity.
+        waitForView(R.id.dashboardTitle, 15000);
         delay();
 
-        onView(withId(R.id.userlistSummary)).check(matches(isDisplayed()));
+        onView(withId(R.id.dashboardTitle)).check(matches(isDisplayed()));
 
-        // Leave the app on UserListActivity.
+        // Leave the app on MainDashboardActivity.
         // Do not call loginScenario.close() or finish().
     }
 

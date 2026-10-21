@@ -70,12 +70,30 @@
 
     <string name="use_otp">Use OTP Instead</string>
     <string name="try_fingerprint_again">Try Again</string>
-    <!-- Main -->
-    <string name="animation_type">Animation</string>
-    <string name="animation_donut">Donut</string>
-    <string name="animation_mobius">Möbius Strip</string>
-    <string name="rotation_speed">Speed</string>
+    <!-- Main Dashboard -->
+    <string name="dashboard_title">Main Dashboard</string>
+    <string name="customers_button">Customers</string>
+    <string name="users_button">User List</string>
     <string name="logout_button">Logout</string>
+
+    <!-- Customer List -->
+    <string name="customerlist_title">Customers</string>
+    <string name="customer_loading">Loading customers...</string>
+    <string name="customer_empty">No customers found.</string>
+    <string name="customer_loaded_count">Customers found: %1$d</string>
+    <string name="customer_load_failed">Could not load customers.</string>
+    <string name="add_customer_button">Add Customer</string>
+    <string name="refresh_customers">Refresh Customers</string>
+    <string name="back_to_dashboard">Back to Dashboard</string>
+    <string name="add_customer_title">Add Customer</string>
+    <string name="save_customer_button">Save</string>
+    <string name="lastname_hint">Last Name</string>
+    <string name="firstname_hint">First Name</string>
+    <string name="mobileno_hint">Mobile No.</string>
+    <string name="address_hint">Address</string>
+    <string name="customer_name_required">Last name and first name are required.</string>
+    <string name="customer_added">Customer added.</string>
+    <string name="customer_add_failed">Could not add customer.</string>
 
     <!--Load User List -->
     <string name="userlist_title">User List</string>
@@ -86,12 +104,6 @@
     <string name="userlist_loaded_count">Users found: %1$d</string>
     <string name="userlist_load_failed">Could not load server users. Showing local users.</string>
     <string name="refresh_users">Refresh Users</string>
-    <string name="open_animation">Open Animation</string>
     <string name="userlist_server_error">Unable to retrieve server users.</string>
-
-    <string-array name="animation_options">
-        <item>@string/animation_donut</item>
-        <item>@string/animation_mobius</item>
-    </string-array>
 
 </resources>

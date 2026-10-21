@@ -276,7 +276,7 @@ public class OtpActivity extends Activity {
                         .isAvailable()
         ) {
 
-            openDonutActivity();
+            openMainDashboard();
 
             return;
         }
@@ -291,7 +291,7 @@ public class OtpActivity extends Activity {
                 .setNegativeButton(
                         R.string.fingerprint_skip,
                         (dialog, which) ->
-                                openDonutActivity()
+                                openMainDashboard()
                 )
                 .setPositiveButton(
                         R.string.fingerprint_enable,
@@ -319,7 +319,7 @@ public class OtpActivity extends Activity {
                                 R.string.fingerprint_success
                         );
 
-                        openDonutActivity();
+                        openMainDashboard();
                     }
 
                     @Override
@@ -338,7 +338,7 @@ public class OtpActivity extends Activity {
 
                         showMessage(message);
 
-                        openDonutActivity();
+                        openMainDashboard();
                     }
                 }
         );
@@ -540,12 +540,12 @@ public class OtpActivity extends Activity {
         finish();
     }
 
-    private void openDonutActivity() {
+    private void openMainDashboard() {
 
         Intent intent =
                 new Intent(
                         this,
-                        UserListActivity.class
+                        MainDashboardActivity.class
                 );
 
         startActivity(intent);

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/background_gradient"
+    android:padding="@dimen/screen_padding">
+
+    <!-- Page title -->
+
+    <TextView
+        android:id="@+id/dashboardTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dashboard_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/spacing_title" />
+
+    <!-- Customers -->
+
+    <Button
+        android:id="@+id/customersButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/customers_button"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/primary_button" />
+
+    <!-- Users -->
+
+    <Button
+        android:id="@+id/usersButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/users_button"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        android:background="@drawable/secondary_button"
+        android:layout_marginTop="@dimen/spacing_small" />
+
+    <!-- Logout -->
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/logout_button"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/danger_button"
+        android:layout_marginTop="@dimen/spacing_large" />
+
+</LinearLayout>

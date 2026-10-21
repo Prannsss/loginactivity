@@ -19,22 +19,6 @@
         android:textStyle="bold"
         android:layout_marginBottom="@dimen/spacing_small" />
 
-    <!-- Activity navigation -->
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Page"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_marginBottom="@dimen/spacing_small" />
-
-    <Spinner
-        android:id="@+id/activityDropdown"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/input_height"
-        android:layout_marginBottom="@dimen/spacing_medium" />
-
     <!-- User count / status -->
 
     <TextView

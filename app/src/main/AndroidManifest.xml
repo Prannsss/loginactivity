@@ -44,9 +44,14 @@
             android:name=".UserListActivity"
             android:exported="false" />
 
-        <!-- Donut Page -->
+        <!-- Main Dashboard -->
         <activity
-            android:name=".DonutActivity"
+            android:name=".MainDashboardActivity"
+            android:exported="false" />
+
+        <!-- Customer List -->
+        <activity
+            android:name=".CustomerListActivity"
             android:exported="false" />
 
     </application>

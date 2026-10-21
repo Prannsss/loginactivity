@@ -200,7 +200,7 @@ public class LoginActivity extends Activity {
                 new FingerprintHelper.AuthenticationCallback() {
                     @Override
                     public void onSuccess() {
-                        openUserListActivity();
+                        openMainDashboard();
                     }
 
                     @Override
@@ -222,10 +222,10 @@ public class LoginActivity extends Activity {
         finish();
     }
 
-    private void openUserListActivity() {
+    private void openMainDashboard() {
         Intent intent = new Intent(
                 LoginActivity.this,
-                UserListActivity.class
+                MainDashboardActivity.class
         );
 
         startActivity(intent);
