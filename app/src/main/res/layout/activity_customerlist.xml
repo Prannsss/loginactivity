@@ -7,16 +7,34 @@
     android:background="@drawable/background_gradient"
     android:padding="@dimen/screen_padding">
 
-    <!-- Page title -->
+    <!-- Header: back button + page title -->
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/customerlist_title"
-        android:textColor="@color/black"
-        android:textSize="@dimen/title_text_size"
-        android:textStyle="bold"
-        android:layout_marginBottom="@dimen/spacing_small" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/spacing_small">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back_button" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/customerlist_title"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold"
+            android:layout_marginStart="@dimen/spacing_small" />
+
+    </LinearLayout>
 
     <!-- Customer count / status -->
 
@@ -60,18 +78,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/refresh_customers"
-        android:textColor="@color/primary"
-        android:textStyle="bold"
-        android:background="@drawable/secondary_button"
-        android:layout_marginTop="@dimen/spacing_small" />
-
-    <!-- Back to dashboard -->
-
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/back_to_dashboard"
         android:textColor="@color/primary"
         android:textStyle="bold"
         android:background="@drawable/secondary_button"

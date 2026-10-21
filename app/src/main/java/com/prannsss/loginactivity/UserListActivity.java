@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class UserListActivity extends Activity {
 
         Button refreshButton = findViewById(R.id.refreshUsersButton);
         Button logoutButton = findViewById(R.id.logoutButton);
+        ImageButton backButton = findViewById(R.id.backButton);
 
         userAdapter = new ArrayAdapter<>(
                 this,
@@ -58,6 +60,7 @@ public class UserListActivity extends Activity {
 
         refreshButton.setOnClickListener(v -> loadUsers());
         logoutButton.setOnClickListener(v -> logout());
+        backButton.setOnClickListener(v -> finish());
 
         loadUsers();
     }

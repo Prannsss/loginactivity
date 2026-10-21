@@ -84,7 +84,7 @@
     <string name="customer_load_failed">Could not load customers.</string>
     <string name="add_customer_button">Add Customer</string>
     <string name="refresh_customers">Refresh Customers</string>
-    <string name="back_to_dashboard">Back to Dashboard</string>
+    <string name="back_button">Back</string>
     <string name="add_customer_title">Add Customer</string>
     <string name="save_customer_button">Save</string>
     <string name="lastname_hint">Last Name</string>

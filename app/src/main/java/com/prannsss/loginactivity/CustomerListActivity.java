@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ public class CustomerListActivity extends Activity {
 
         Button addCustomerButton = findViewById(R.id.addCustomerButton);
         Button refreshButton = findViewById(R.id.refreshCustomersButton);
-        Button backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
 
         customerAdapter = new ArrayAdapter<>(
                 this,
